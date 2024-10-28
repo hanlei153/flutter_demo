@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-## Used Flutter version
+## 开发环境版本信息
 
 Flutter 3.24.2 • channel stable • https://github.com/flutter/flutter.git  
 Framework • revision 4cf269e36d (8 weeks ago) • 2024-09-03 14:30:00 -0700  
