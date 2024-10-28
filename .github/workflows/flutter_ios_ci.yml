@@ -32,7 +32,7 @@ jobs:
           cd ..
           flutter build ios --release --no-codesign # 构建 iOS 应用
 
-          
+
       - name: Build IPA
         run: |
           cd ios
@@ -40,7 +40,7 @@ jobs:
           xcodebuild -exportArchive -archivePath build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3  # 更新为新版本
         with:
           name: MyApp.ipa
-          path: ios/build/*.ipa 
+          path: ios/build/*.ipa
