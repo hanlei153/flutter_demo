@@ -1,10 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'ThemeData/GlobalThemeData.dart';
 import 'package:provider/provider.dart';
 import 'pages/users/edit_profile_page.dart';
 import 'pages/users/favorites_page.dart';
+import 'pages/users/privacy_page.dart';
+import '/pages/users/About_page.dart';
 import 'pages/login/login.dart';
 import 'router/navigation.dart';
 import 'ScrollView/imageSlider.dart';
@@ -23,11 +23,11 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: "Hanlei's app",
+        title: "my_app",
         themeMode: ThemeMode.dark,
         theme: GlobalThemData.darkThemeData,
         home: FutureBuilder<bool>(
-          future: Local_Storage_Manager().getBool('isLoggedIn'),
+          future: LocalStorageManager().getBool('isLoggedIn'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -89,6 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: '我的',
           ),
         ],
+        selectedItemColor: const Color.fromARGB(255, 247, 245, 245),
+        unselectedItemColor: Colors.grey,
       ),
     );
   }
@@ -112,8 +114,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _checkFirstLogin() async {
-    print(await Local_Storage_Manager().getBool('isFirstLogin'));
-    if (await Local_Storage_Manager().getBool('isFirstLogin') == false) {
+    print(await LocalStorageManager().getBool('isFirstLogin'));
+    if (await LocalStorageManager().getBool('isFirstLogin') == false) {
       @override
       final snackBar = SnackBar(
         content: Text(
@@ -131,8 +133,8 @@ class _HomePageState extends State<HomePage> {
             label: '去修改',
             textColor: const Color.fromARGB(255, 240, 240, 238),
             onPressed: () {
-              navigateToPages(
-                  context, () => EditProfilePage(), SlideDirection.right);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => EditProfilePage()));
             }),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -146,7 +148,9 @@ class _HomePageState extends State<HomePage> {
         title: Text('首页'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.only(
+          top: 20,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -164,14 +168,14 @@ class _HomePageState extends State<HomePage> {
 }
 
 final List<String> imageUrls = [
-  'https://bkimg.cdn.bcebos.com/pic/7acb0a46f21fbe098f88af1663600c338644adda?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
-  'https://bkimg.cdn.bcebos.com/pic/42a98226cffc1e178a82336014dae103738da9774305?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
-  'https://bkimg.cdn.bcebos.com/pic/4ec2d5628535e5dde711a2574b9eb0efce1b9c16c4b9?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
-  'https://pic.rmb.bdstatic.com/bjh/events/af82e92fce46bfbcec63962e1f035bc0416.jpeg@h_1280',
-  'https://so1.360tres.com/t01ddf0b5233615bed1.jpg',
-  'https://bkimg.cdn.bcebos.com/pic/b8014a90f603738d1db3766fb01bb051f919ec86?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
-  'https://x0.ifengimg.com/ucms/2021_11/5F71B0424440067AC277C513CE9C0791F236D1C9_size34_w640_h359.jpg',
-  'https://bkimg.cdn.bcebos.com/pic/f9dcd100baa1cd114c6ec44cbd12c8fcc2ce2d85?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
+  'assets/兵马俑.webp',
+  'assets/阿尔忒弥斯神庙.webp',
+  'assets/奥林匹亚宙斯巨像.jpeg',
+  'assets/空中花园.webp',
+  'assets/罗德岛太阳神巨像.webp',
+  'assets/金字塔.webp',
+  'assets/摩索拉斯陵墓.jpg',
+  'assets/亚历山大灯塔.jpg',
 ];
 
 // 个人页布局
@@ -182,23 +186,29 @@ class PersonalPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          title: IconButton(
-            onPressed: () {
-              navigateToPages(
-                  context, () => EditProfilePage(), SlideDirection.left);
-            },
-            icon: Icon(Icons.menu),
-            padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {
-                navigateToPages(
-                    context, () => EditProfilePage(), SlideDirection.right);
-              },
-              icon: Icon(Icons.edit),
-            )
-          ]),
+        // title: IconButton(
+        //   onPressed: () {
+        //     navigateToPages(
+        //         context, () => EditProfilePage(), SlideDirection.left);
+        //   },
+        //   icon: Icon(Icons.menu),
+        //   padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
+        // ),
+        actions: [
+          UnconstrainedBox(
+            child: Padding(
+              padding: EdgeInsets.only(right: 25),
+              child: IconButton(
+                onPressed: () {
+                  navigateToPages(
+                      context, () => EditProfilePage(), SlideDirection.right);
+                },
+                icon: Icon(Icons.menu),
+              ),
+            ),
+          )
+        ],
+      ),
       body: CustomScrollView(
         slivers: [
           const SliverAppBar(
@@ -251,11 +261,39 @@ class PersonalPage extends StatelessWidget {
                     ),
                   );
                 } else if (index == 1) {
+                  return GestureDetector(
+                    onTap: () {
+                      navigateToPages(
+                          context, () => PrivacyPage(), SlideDirection.right);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(left: 50, top: 30),
+                      child: Text(
+                        '隐私协议',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  );
+                } else if (index == 2) {
+                  return GestureDetector(
+                    onTap: () {
+                      navigateToPages(
+                          context, () => AboutPage(), SlideDirection.right);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(left: 50, top: 30),
+                      child: Text(
+                        '关于',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  );
+                } else if (index == 3) {
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
                       onPressed: () async {
-                        await Local_Storage_Manager()
+                        await LocalStorageManager()
                             .setBool('isLoggedIn', false);
                         Navigator.pushReplacement(
                             context,
@@ -276,7 +314,7 @@ class PersonalPage extends StatelessWidget {
                   );
                 }
               },
-              childCount: 2,
+              childCount: 4,
             ),
           ),
         ],

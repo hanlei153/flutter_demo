@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -13,16 +14,28 @@ class ExampleParallax extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          SizedBox(
+            height: 20,
+          ),
           Text(
             '世界八大奇迹',
             style: TextStyle(fontSize: 20),
           ),
           for (final location in locations)
-            LocationListItem(
-              imageUrl: location.imageUrl,
-              name: location.name,
-              country: location.country,
-            ),
+            GestureDetector(
+              onTap: () async {
+                final Uri url = Uri.parse(location.Url);
+                if (!await launchUrl(url,
+                    mode: LaunchMode.externalApplication)) {
+                  throw Exception('Could not launch $url');
+                }
+              },
+              child: LocationListItem(
+                imageUrl: location.imageUrl,
+                name: location.name,
+                country: location.country,
+              ),
+            )
         ],
       ),
     );
@@ -70,7 +83,7 @@ class LocationListItem extends StatelessWidget {
         backgroundImageKey: _backgroundImageKey,
       ),
       children: [
-        Image.network(
+        Image.asset(
           imageUrl,
           key: _backgroundImageKey,
           fit: BoxFit.cover,
@@ -314,57 +327,71 @@ class ScrollviewImgPage extends StatelessWidget {
 }
 
 class Location {
+  final String Url;
   final String imageUrl;
   final String name;
   final String country;
 
-  Location({required this.imageUrl, required this.name, required this.country});
+  Location(
+      {required this.Url,
+      required this.imageUrl,
+      required this.name,
+      required this.country});
 }
 
 final List<Location> locations = [
   Location(
-    imageUrl:
-        'https://bkimg.cdn.bcebos.com/pic/7acb0a46f21fbe098f88af1663600c338644adda?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
+    Url:
+        'https://baike.baidu.com/item/%E8%83%A1%E5%A4%AB%E9%87%91%E5%AD%97%E5%A1%94/448327?lemmaFrom=lemma_starMap&fromModule=lemma_starMap&starNodeId=73c81632c23dff3d9026ddd3&lemmaIdFrom=147601',
+    imageUrl: 'assets/金字塔.webp',
     name: '胡夫金字塔',
     country: '古埃及',
   ),
   Location(
-    imageUrl:
-        'https://bkimg.cdn.bcebos.com/pic/42a98226cffc1e178a82336014dae103738da9774305?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
+    Url:
+        "https://baike.baidu.com/item/%E7%A9%BA%E4%B8%AD%E8%8A%B1%E5%9B%AD/34908?lemmaFrom=lemma_starMap&fromModule=lemma_starMap&starNodeId=73c81632c23dff3d9026ddd3&lemmaIdFrom=147601",
+    imageUrl: 'assets/空中花园.webp',
     name: '空中花园',
     country: '伊拉克',
   ),
   Location(
-      imageUrl:
-          'https://bkimg.cdn.bcebos.com/pic/4ec2d5628535e5dde711a2574b9eb0efce1b9c16c4b9?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
+      Url:
+          "https://baike.baidu.com/item/%E9%98%BF%E5%B0%94%E5%BF%92%E5%BC%A5%E6%96%AF%E7%A5%9E%E5%BA%99/669090?lemmaFrom=lemma_starMap&fromModule=lemma_starMap&starNodeId=73c81632c23dff3d9026ddd3&lemmaIdFrom=147601",
+      imageUrl: 'assets/阿尔忒弥斯神庙.webp',
       name: '阿尔忒弥斯神庙',
       country: '希腊'),
   Location(
-    imageUrl:
-        'https://pic.rmb.bdstatic.com/bjh/events/af82e92fce46bfbcec63962e1f035bc0416.jpeg@h_1280',
+    Url:
+        "https://baike.baidu.com/item/%E5%A5%A5%E6%9E%97%E5%8C%B9%E4%BA%9A%E5%AE%99%E6%96%AF%E5%B7%A8%E5%83%8F/7688845?structureClickId=7688845&structureId=73c81632c23dff3d9026ddd3&structureItemId=19986ed3cb3c7d3d663552f0&lemmaFrom=starMapContent_star&fromModule=starMap_content&lemmaIdFrom=147601",
+    imageUrl: 'assets/奥林匹亚宙斯巨像.jpeg',
     name: '奥林匹亚宙斯巨像',
     country: '希腊',
   ),
   Location(
-    imageUrl: 'https://so1.360tres.com/t01ddf0b5233615bed1.jpg',
+    Url:
+        "https://baike.baidu.com/item/%E6%91%A9%E7%B4%A2%E6%8B%89%E6%96%AF%E9%99%B5%E5%A2%93/157895?structureClickId=157895&structureId=73c81632c23dff3d9026ddd3&structureItemId=e6d27944c4e0a9735dd29bcd&lemmaFrom=starMapContent_star&fromModule=starMap_content&lemmaIdFrom=147601",
+    imageUrl: 'assets/摩索拉斯陵墓.jpg',
     name: '摩索拉斯陵墓',
     country: '土耳其',
   ),
   Location(
-    imageUrl:
-        'https://bkimg.cdn.bcebos.com/pic/b8014a90f603738d1db3766fb01bb051f919ec86?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
+    Url:
+        "https://baike.baidu.com/item/%E7%BD%97%E5%BE%B7%E5%B2%9B%E5%A4%AA%E9%98%B3%E7%A5%9E%E5%B7%A8%E5%83%8F/142057?structureClickId=142057&structureId=73c81632c23dff3d9026ddd3&structureItemId=f39dc6c7378a2e4079767908&lemmaFrom=starMapContent_star&fromModule=starMap_content&lemmaIdFrom=147601",
+    imageUrl: 'assets/罗德岛太阳神巨像.webp',
     name: '罗德岛太阳神巨像',
     country: '希腊',
   ),
   Location(
-    imageUrl:
-        'https://x0.ifengimg.com/ucms/2021_11/5F71B0424440067AC277C513CE9C0791F236D1C9_size34_w640_h359.jpg',
+    Url:
+        "https://baike.baidu.com/item/%E4%BA%9A%E5%8E%86%E5%B1%B1%E5%A4%A7%E7%81%AF%E5%A1%94/158711?structureClickId=158711&structureId=73c81632c23dff3d9026ddd3&structureItemId=d4c4e5133d08d137e28f6bc9&lemmaFrom=starMapContent_star&fromModule=starMap_content&lemmaIdFrom=147601",
+    imageUrl: 'assets/亚历山大灯塔.jpg',
     name: '亚历山大灯塔',
     country: '埃及',
   ),
   Location(
-    imageUrl:
-        'https://bkimg.cdn.bcebos.com/pic/f9dcd100baa1cd114c6ec44cbd12c8fcc2ce2d85?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080',
+    Url:
+        "https://baike.baidu.com/item/%E5%85%B5%E9%A9%AC%E4%BF%91/60649?structureClickId=60649&structureId=73c81632c23dff3d9026ddd3&structureItemId=eff646771b30d8c7dfa07b4a&lemmaFrom=starMapContent_star&fromModule=starMap_content&lemmaIdFrom=147601",
+    imageUrl: 'assets/兵马俑.webp',
     name: '兵马俑',
     country: '中国',
   ),

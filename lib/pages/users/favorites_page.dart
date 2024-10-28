@@ -16,7 +16,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
   }
 
   Future<void> _loadFavorites() async {
-    final favoritesManager = Local_Storage_Manager();
+    final favoritesManager = LocalStorageManager();
     final LoadFavoritesList = await favoritesManager.getStringList('favorites');
     setState(() {
       favorites = LoadFavoritesList ?? [];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hanlei_is_app/main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'dart:async';
 
@@ -47,7 +48,7 @@ class _ImageSliderState extends State<ImageSlider> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220,
+      height: 300,
       child: Column(children: [
         Expanded(
           child: PageView.builder(
@@ -55,7 +56,7 @@ class _ImageSliderState extends State<ImageSlider> {
               itemCount: widget.imageUrls.length,
               itemBuilder: (context, index) {
                 return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                     child: AspectRatio(
                       aspectRatio: 16 / 9,
                       child: ClipRRect(
@@ -63,10 +64,8 @@ class _ImageSliderState extends State<ImageSlider> {
                         child: ColorFiltered(
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(0.3), BlendMode.darken),
-                          child: Image.network(
-                            widget.imageUrls[index],
-                            fit: BoxFit.cover,
-                          ),
+                          child:
+                              Image.asset(imageUrls[index], fit: BoxFit.cover),
                         ),
                       ),
                     ));

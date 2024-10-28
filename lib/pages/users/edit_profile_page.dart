@@ -1,7 +1,6 @@
 // lib/page/edit_profile_page.dart
 import 'package:flutter/material.dart';
 import 'package:hanlei_is_app/Local_Storage/shared_preferences.dart';
-import 'package:hanlei_is_app/main.dart';
 import 'package:hanlei_is_app/pages/login/login.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -52,15 +51,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   String username = _nameController.text;
                   String email = _emailController.text;
                   String password = _passController.text;
-                  await Local_Storage_Manager().setString('username', username);
-                  await Local_Storage_Manager().setString('email', email);
+                  await LocalStorageManager().setString('username', username);
+                  await LocalStorageManager().setString('email', email);
                   if (password.isEmpty) {
                     Navigator.pop(context);
                   } else {
-                    await Local_Storage_Manager()
-                        .setString('password', password);
-                    await Local_Storage_Manager().setBool('isFirstLogin', true);
-                    await Local_Storage_Manager().setBool('isLoggedIn', false);
+                    await LocalStorageManager().setString('password', password);
+                    await LocalStorageManager().setBool('isFirstLogin', true);
+                    await LocalStorageManager().setBool('isLoggedIn', false);
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => LoginPage()));
                   }
