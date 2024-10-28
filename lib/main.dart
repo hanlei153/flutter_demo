@@ -100,11 +100,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class HomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
   const HomePage({super.key});
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   bool isFirstLogin = false;
 
   @override
@@ -182,7 +182,6 @@ final List<String> imageUrls = [
 class PersonalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
