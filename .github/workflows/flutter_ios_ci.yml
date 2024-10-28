@@ -30,13 +30,13 @@ jobs:
           cd ios
           pod install  # 确保 CocoaPods 安装依赖
           cd ..
-          flutter build ios --release --no-codesign
+          flutter build ios --release
 
-      - name: Build IPA
-        run: |
-          cd ios
-          xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/Runner.xcarchive CODE_SIGNING_ALLOWED=NO archive
-          xcodebuild -exportArchive -archivePath build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build
+      # - name: Build IPA
+      #   run: |
+      #     cd ios
+      #     xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/Runner.xcarchive CODE_SIGNING_ALLOWED=NO archive
+      #     xcodebuild -exportArchive -archivePath build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build
 
       - name: ls
         run: |
