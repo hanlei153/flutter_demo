@@ -35,7 +35,7 @@ jobs:
       - name: Build IPA
         run: |
           cd ios
-          xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/Runner.xcarchive archive
+          xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/Runner.xcarchive CODE_SIGNING_ALLOWED=NO archive
           xcodebuild -exportArchive -archivePath build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build --no-sign
 
       - name: ls
