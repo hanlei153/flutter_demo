@@ -1,7 +1,7 @@
 // lib/page/edit_profile_page.dart
 import 'package:flutter/material.dart';
-import 'package:hanlei_is_app/Local_Storage/shared_preferences.dart';
-import 'package:hanlei_is_app/pages/login/login.dart';
+import 'package:my_app/Local_Storage/shared_preferences.dart';
+import 'package:my_app/pages/login/login.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override

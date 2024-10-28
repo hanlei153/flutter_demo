@@ -1,4 +1,4 @@
-package com.example.hanlei_is_app
+package com.example.my_app
 
 import io.flutter.embedding.android.FlutterActivity
 

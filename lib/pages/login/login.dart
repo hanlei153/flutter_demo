@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hanlei_is_app/main.dart';
-import 'package:hanlei_is_app/Local_Storage/shared_preferences.dart';
+import 'package:my_app/main.dart';
+import 'package:my_app/Local_Storage/shared_preferences.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();

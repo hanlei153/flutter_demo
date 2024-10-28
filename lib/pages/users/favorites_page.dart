@@ -1,6 +1,6 @@
 // 收藏页布局
 import 'package:flutter/material.dart';
-import 'package:hanlei_is_app/Local_Storage/shared_preferences.dart';
+import 'package:my_app/Local_Storage/shared_preferences.dart';
 
 class FavoritesPage extends StatefulWidget {
   @override
