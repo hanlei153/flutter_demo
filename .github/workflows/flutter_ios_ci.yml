@@ -30,10 +30,17 @@ jobs:
           cd ios
           pod install  # 确保 CocoaPods 安装依赖
           cd ..
-          flutter build ipa --release --no-codesign # 构建 iOS 应用
-          ls -l ios/
-          ls -l build/ios/ipa
+          flutter build ios --release --no-codesign
 
+      - name: Build IPA
+        run: |
+          cd ios
+          xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/Runner.xcarchive archive
+          xcodebuild -exportArchive -archivePath build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build --no-sign
+
+      - name: ls
+        run: |
+          ls -l ios/ & ls -l ios/build/ & ls -l build/ & ls -l build/ios
 
       - name: Upload IPA
         uses: actions/upload-artifact@v3  # 更新为新版本
