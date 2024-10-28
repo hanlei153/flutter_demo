@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  notifyListeners();
+  // notifyListeners();
 }
 
 class MyHomePage extends StatefulWidget {
