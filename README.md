@@ -12,15 +12,6 @@ Tools • Dart 3.5.2 • DevTools 2.37.2
 ## Vs Code 插件版本
 Flutter：v3.98.0
 
-## 构建apk
-首先克隆项目到本地：
-
-```bash
-git clone https://github.com/hanlei153/flutter_demo.git
-cd flutter_demo
-flutter build apk -v
-```
-
 ## 代理设置
 如果你无法下载依赖，打开android/gradle.properties文件，将代理相关设置的注释取消
 ```bash
@@ -35,3 +26,15 @@ vim android/gradle.properties
 set HTTP_PROXY=http://127.0.0.1:7890
 set HTTPS_PROXY=http://127.0.0.1:7890
 ```
+
+## 构建apk
+首先克隆项目到本地：
+
+```bash
+git clone https://github.com/hanlei153/flutter_demo.git
+cd flutter_demo
+flutter build apk -v
+```
+
+## 构建ipa
+将项目提交至github，github Actions检测到push或pull操作main分支时，会自动进行构建

@@ -31,6 +31,8 @@ jobs:
           pod install  # 确保 CocoaPods 安装依赖
           cd ..
           flutter build ios --release --no-codesign # 构建 iOS 应用
+          ls -l ios/
+          ls -l ios/build
 
 
       - name: Upload IPA
