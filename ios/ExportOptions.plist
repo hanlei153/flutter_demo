@@ -3,12 +3,14 @@
 <plist version="1.0">
 <dict>
     <key>method</key>
-    <string>development</string> <!-- 或者是 'ad-hoc' -->
+    <string>development</string>
     <key>signingStyle</key>
-    <string>matic</string> <!-- 或者是 'automatic' -->
-    <key>uploadBitcode</key>
+    <string>manual</string>
+    <key>stripSwiftSymbols</key>
+    <true/>
+    <key>compileBitcode</key>
     <false/>
-    <key>thinning</key>
-    <string>&lt;none&gt;</string>
+    <key>destination</key>
+    <string>export</string>
 </dict>
 </plist>
