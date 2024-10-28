@@ -17,3 +17,18 @@ git clone https://github.com/hanlei153/flutter_demo.git
 cd flutter_demo
 flutter build apk -v
 ```
+
+## 代理设置
+如果你无法下载依赖，打开android/gradle.properties文件，将代理相关设置的注释取消
+```bash
+cd flutter_demo
+vim android/gradle.properties
+    ...
+    systemProp.http.proxyHost=127.0.0.1
+    systemProp.http.proxyPort=7890
+    systemProp.https.proxyHost=127.0.0.1
+    systemProp.https.proxyPort=7890
+# windows终端使用
+set HTTP_PROXY=http://127.0.0.1:7890
+set HTTPS_PROXY=http://127.0.0.1:7890
+```
