@@ -30,7 +30,7 @@ jobs:
           cd ios
           pod install  # 确保 CocoaPods 安装依赖
           cd ..
-          flutter build ios --release --no-codesign
+          flutter build ios --release --no-codesign --obfuscate --split-debug-info=./symbols
 
       # - name: Build IPA
       #   run: |
@@ -40,10 +40,24 @@ jobs:
 
       - name: ls
         run: |
-          ls -l ios/ & ls -l ios/build/ & ls -l build/ & ls -l build/ios
+          cd build/ios/iphoneos/Runner.app/Frameworks
+          cd App.framework
+          xcrun bitcode_strip -r app -o app
+          cd ..
+          cd Flutter.framework
+          xcrun bitcode_strip -r Flutter -o Flutter
+          cd ..
+          xcrun bitcode_strip -r libswiftCore.dylib -o libswiftCore.dylib  
+          xcrun bitcode_strip -r libswiftFoundation.dylib -o libswiftFoundation.dylib
+          xcrun bitcode_strip -r libswiftDispatch.dylib -o libswiftDispatch.dylib
+          cd Flutter.framework
 
-      - name: Upload IPA
-        uses: actions/upload-artifact@v3  # 更新为新版本
-        with:
-          name: MyApp.ipa
-          path: ios/build/*.ipa
+          cd ../../../
+          rm -rf Payload
+          mkdir Payload
+          mv Runner.app Payload/Runner.app
+          zip -9 -r app.zip Payload
+          rm -rf app.ipa
+          mv app.zip app.ipa
+          pwd
+          ls -l
