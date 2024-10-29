@@ -31,6 +31,12 @@ jobs:
           pod install  # 确保 CocoaPods 安装依赖
           cd ..
           flutter build ios --release --no-codesign --obfuscate --split-debug-info=./symbols
+          cd ios
+          xcodebuild archive -destination 'generic/platform=iOS' -scheme myApp -archivePath ./archive CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY= CODE_SIGN_ENTITLEMENTS= 
+
+          mkdir -p ./Payload
+          mv ./archive/Products/Applications/myApp.app ./Payload/myApp.app
+          zip -r myApp.ipa ./Payload
 
       # - name: Build IPA
       #   run: |
@@ -38,31 +44,31 @@ jobs:
       #     xcodebuild -workspace Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/Runner.xcarchive CODE_SIGNING_ALLOWED=NO archive
       #     xcodebuild -exportArchive -archivePath build/Runner.xcarchive -exportOptionsPlist ExportOptions.plist -exportPath build
 
-      - name: ls
-        run: |
-          cd build/ios/iphoneos/Runner.app/Frameworks
-          cd App.framework
-          xcrun bitcode_strip -r app -o app
-          cd ..
-          cd Flutter.framework
-          xcrun bitcode_strip -r Flutter -o Flutter
-          cd ..
-          xcrun bitcode_strip -r libswiftCore.dylib -o libswiftCore.dylib  
-          xcrun bitcode_strip -r libswiftFoundation.dylib -o libswiftFoundation.dylib
-          xcrun bitcode_strip -r libswiftDispatch.dylib -o libswiftDispatch.dylib
-          cd Flutter.framework
+      # - name: ls
+      #   run: |
+      #     cd build/ios/iphoneos/Runner.app/Frameworks
+      #     cd App.framework
+      #     xcrun bitcode_strip -r app -o app
+      #     cd ..
+      #     cd Flutter.framework
+      #     xcrun bitcode_strip -r Flutter -o Flutter
+      #     cd ..
+      #     xcrun bitcode_strip -r libswiftCore.dylib -o libswiftCore.dylib  
+      #     xcrun bitcode_strip -r libswiftFoundation.dylib -o libswiftFoundation.dylib
+      #     xcrun bitcode_strip -r libswiftDispatch.dylib -o libswiftDispatch.dylib
+      #     cd Flutter.framework
 
-          cd ../../../
-          rm -rf Payload
-          mkdir Payload
-          mv Runner.app Payload/Runner.app
-          zip -9 -r app.zip Payload
-          rm -rf app.ipa
-          mv app.zip app.ipa
+      #     cd ../../../
+      #     rm -rf Payload
+      #     mkdir Payload
+      #     mv Runner.app Payload/Runner.app
+      #     zip -9 -r app.zip Payload
+      #     rm -rf app.ipa
+      #     mv app.zip app.ipa
 
 
       - name: Upload IPA
         uses: actions/upload-artifact@v3  # 更新为新版本
         with:
           name: MyApp.ipa
-          path: build/ios/iphoneos/*.ipa
+          path: ios/*.ipa
