@@ -32,10 +32,10 @@ jobs:
           cd ..
           flutter build ios --release --no-codesign --obfuscate --split-debug-info=./symbols
           cd ios
-          xcodebuild archive -destination 'generic/platform=iOS' -scheme myApp -archivePath ./archive CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY= CODE_SIGN_ENTITLEMENTS= 
+          xcodebuild archive -destination 'generic/platform=iOS' -scheme my_app -archivePath ./archive CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY= CODE_SIGN_ENTITLEMENTS= 
 
           mkdir -p ./Payload
-          mv ./archive/Products/Applications/myApp.app ./Payload/myApp.app
+          mv ./archive/Products/Applications/my_app.app ./Payload/myApp.app
           zip -r myApp.ipa ./Payload
 
       # - name: Build IPA
