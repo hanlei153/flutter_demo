@@ -59,5 +59,10 @@ jobs:
           zip -9 -r app.zip Payload
           rm -rf app.ipa
           mv app.zip app.ipa
-          pwd
-          ls -l
+
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v3  # 更新为新版本
+        with:
+          name: MyApp.ipa
+          path: build/ios/iphoneos/*.ipa
