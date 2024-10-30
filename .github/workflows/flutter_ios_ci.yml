@@ -11,7 +11,7 @@ on:
 jobs:
   build:
 
-    runs-on: macos-10.13  # 使用 macOS 环境
+    runs-on: macos-latest  # 使用 macOS 环境
 
     steps:
       - name: Checkout code
