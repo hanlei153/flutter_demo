@@ -11,6 +11,7 @@ import 'pages/users/favorites_page.dart';
 import 'pages/users/privacy_page.dart';
 import 'pages/users/About_page.dart';
 import 'pages/login/login.dart';
+import 'SplashScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -27,18 +28,7 @@ class MyApp extends StatelessWidget {
         title: "my_app",
         themeMode: ThemeMode.dark,
         theme: GlobalThemData.darkThemeData,
-        home: FutureBuilder<bool>(
-          future: LocalStorageManager().getBool('isLoggedIn'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasData && snapshot.data == true) {
-              return MyHomePage();
-            } else {
-              return LoginPage();
-            }
-          },
-        ),
+        home: SplashScreen(),
       ),
     );
   }

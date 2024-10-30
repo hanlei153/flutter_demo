@@ -27,7 +27,7 @@ jobs:
 
       - name: Build Android
         run: |
-          flutter build apk -V
+          flutter build apk -v
 
 
       - name: Upload APK
