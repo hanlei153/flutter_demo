@@ -33,32 +33,9 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image.asset('assets/icon/logo.png'),
             Text(
-              '欢',
-              style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(255, 245, 241, 241)),
-            ),
-            SizedBox(height: 20),
-            Text(
-              '迎',
-              style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(255, 245, 241, 241)),
-            ),
-            SizedBox(height: 20),
-            Text(
-              '回',
-              style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(255, 245, 241, 241)),
-            ),
-            SizedBox(height: 20),
-            Text(
-              '来',
+              '欢迎回来',
               style: TextStyle(
                   fontSize: 80,
                   fontWeight: FontWeight.bold,
