@@ -40,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v3  # 更新为新版本
         with:
           name: MyApp.apk
-          path: /build/app/outputs/apk/release/*.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
