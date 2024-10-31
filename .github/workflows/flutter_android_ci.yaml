@@ -22,6 +22,11 @@ jobs:
         with:
           flutter-version: '3.24.2'  # 替换为你希望使用的 Flutter 版本
 
+      - name: set up jdk17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
       - name: Install dependencies
         run: flutter pub get
 
