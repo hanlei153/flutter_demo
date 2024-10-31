@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/main.dart';
+import 'package:my_app/Local_Storage/shared_preferences.dart';
+import 'articles.dart';
 
 class ArticleDetails extends StatefulWidget {
   final Article article;
@@ -12,10 +13,32 @@ class ArticleDetails extends StatefulWidget {
 
 class _ArticleDetailsState extends State<ArticleDetails> {
   bool isFavorited = false;
-  void _toggleFavorite() {
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFavoriteStatus();
+  }
+
+  // 加载收藏状态
+  Future<void> _loadFavoriteStatus() async {
+    bool favorited =
+        await LocalStorageManager().isArticleFavorited(widget.article);
     setState(() {
-      isFavorited = !isFavorited; // 切换收藏状态
+      isFavorited = favorited;
     });
+  }
+
+  void _toggleFavorite() async {
+    setState(() {
+      isFavorited = !isFavorited;
+    });
+
+    if (isFavorited) {
+      await LocalStorageManager().saveFavoriteArticle(widget.article);
+    } else {
+      await LocalStorageManager().removeFavoriteArticle(widget.article);
+    }
   }
 
   @override
@@ -55,7 +78,7 @@ class _ArticleDetailsState extends State<ArticleDetails> {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  widget.article.Main_body,
+                  widget.article.mainbody,
                   style: TextStyle(fontSize: 16),
                 ),
               ],

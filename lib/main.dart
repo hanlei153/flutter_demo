@@ -5,11 +5,12 @@ import 'router/navigation.dart';
 import 'ScrollView/imageSlider.dart';
 import 'ScrollView/scrollview_img.dart';
 import 'Local_Storage/shared_preferences.dart';
-import 'pages/Article/article_details.dart';
+import 'pages/Article/article_card.dart';
 import 'pages/users/edit_profile_page.dart';
 import 'pages/users/favorites_page.dart';
 import 'pages/users/privacy_page.dart';
 import 'pages/users/About_page.dart';
+import 'pages/Article/articles.dart';
 import 'pages/login/login.dart';
 import 'SplashScreen.dart';
 
@@ -162,51 +163,15 @@ class HomePageState extends State<HomePage> {
             SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
               final article = Articles[index];
-              return ArticleCard(article: article);
+              return Padding(
+                padding: EdgeInsets.all(5),
+                child: ArticleCard(article: article),
+              );
             }, childCount: Articles.length))
           ],
         ),
       ),
     );
-  }
-}
-
-// 文章卡片布局
-class ArticleCard extends StatelessWidget {
-  final Article article;
-
-  const ArticleCard({Key? key, required this.article}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-        margin: EdgeInsets.all(10),
-        child: Container(
-          height: 160,
-          child: ListTile(
-            title: Text.rich(TextSpan(children: [
-              TextSpan(
-                text: '${article.title}   ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              TextSpan(
-                text: article.author,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              )
-            ])),
-            subtitle: Text(article.Main_body,
-                maxLines: 5, overflow: TextOverflow.ellipsis),
-            isThreeLine: true,
-            onTap: () {
-              navigateToPages(
-                  context,
-                  () => ArticleDetails(
-                        article: article,
-                      ),
-                  SlideDirection.right);
-            },
-          ),
-        ));
   }
 }
 
@@ -357,23 +322,11 @@ final List<String> imageUrls = [
   'assets/亚历山大灯塔.jpg',
 ];
 
-class Article {
-  final String title;
-  final String author;
-  final String Main_body;
-
-  Article({
-    required this.title,
-    required this.author,
-    required this.Main_body,
-  });
-}
-
 final List<Article> Articles = [
   Article(
-      title: 'Python开发',
-      author: 'hanlei',
-      Main_body: '''Python 是一个高层次的结合了解释性、编译性、互动性和面向对象的脚本语言。
+    title: 'Python开发',
+    author: 'hanlei',
+    mainbody: '''Python 是一个高层次的结合了解释性、编译性、互动性和面向对象的脚本语言。
 
 Python 的设计具有很强的可读性，相比其他语言经常使用英文关键字，其他语言的一些标点符号，它具有比其他语言更有特色语法结构。
 
@@ -417,12 +370,13 @@ Python 特点
 
 9.GUI 编程：Python 支持 GUI 可以创建和移植到许多系统调用。
 
-10.可嵌入: 你可以将 Python 嵌入到 C/C++ 程序，让你的程序的用户获得"脚本化"的能力。'''),
+10.可嵌入: 你可以将 Python 嵌入到 C/C++ 程序，让你的程序的用户获得"脚本化"的能力。''',
+  ),
   Article(
-      title: 'Java开发',
-      author: 'hanlei',
-      Main_body:
-          '''Java 是由 Sun Microsystems 公司于 1995 年 5 月推出的 Java 面向对象程序设计语言和 Java 平台的总称。由 James Gosling和同事们共同研发，并在 1995 年正式推出。
+    title: 'Java开发',
+    author: 'hanlei',
+    mainbody:
+        '''Java 是由 Sun Microsystems 公司于 1995 年 5 月推出的 Java 面向对象程序设计语言和 Java 平台的总称。由 James Gosling和同事们共同研发，并在 1995 年正式推出。
 
 后来 Sun 公司被 Oracle （甲骨文）公司收购，Java 也随之成为 Oracle 公司的产品。
 
@@ -503,9 +457,10 @@ Java 语言的设计目标之一是适应于动态变化的环境。Java 程序�
 2017 年 9 月 21 日，Oracle 公司发表 Java SE 9
 2018 年 3 月 21 日，Oracle 公司发表 Java SE 10
 2018 年 9 月 25 日，Java SE 11 发布
-2019 年 3 月 20 日，Java SE 12 发布'''),
+2019 年 3 月 20 日，Java SE 12 发布''',
+  ),
   Article(
-      title: 'NodeJS开发', author: 'hanlei', Main_body: '''这是小白的零基础JavaScript全栈教程。
+      title: 'NodeJS开发', author: 'hanlei', mainbody: '''这是小白的零基础JavaScript全栈教程。
 
 JavaScript是世界上最流行的脚本语言，因为你在电脑、手机、平板上浏览的所有的网页，以及无数基于HTML5的手机App，交互逻辑都是由JavaScript驱动的。
 
@@ -523,10 +478,10 @@ JavaScript一度被认为是一种玩具编程语言，它有很多缺陷，所�
 
 一个合格的开发人员应该精通JavaScript和其他编程语言。如果你已经掌握了其他编程语言，或者你还什么都不会，请立刻开始学习JavaScript，不要被Web时代所淘汰。'''),
   Article(
-      title: 'Flutter开发',
-      author: 'hanlei',
-      Main_body:
-          '''Flutter Widget采用现代响应式框架构建，这是从 React 中获得的灵感，中心思想是用widget构建你的UI。 Widget描述了他们的视图在给定其当前配置和状态时应该看起来像什么。当widget的状态发生变化时，widget会重新构建UI，Flutter会对比前后变化的不同， 以确定底层渲染树从一个状态转换到下一个状态所需的最小更改（译者语：类似于React/Vue中虚拟DOM的diff算法）。
+    title: 'Flutter开发',
+    author: 'hanlei',
+    mainbody:
+        '''Flutter Widget采用现代响应式框架构建，这是从 React 中获得的灵感，中心思想是用widget构建你的UI。 Widget描述了他们的视图在给定其当前配置和状态时应该看起来像什么。当widget的状态发生变化时，widget会重新构建UI，Flutter会对比前后变化的不同， 以确定底层渲染树从一个状态转换到下一个状态所需的最小更改（译者语：类似于React/Vue中虚拟DOM的diff算法）。
 
 注意: 如果您想通过代码来深入了解Flutter，请查看 构建Flutter布局 和 为Flutter App添加交互功能。
 
@@ -980,11 +935,12 @@ Key在构建相同类型widget的多个实例时很有用。例如，ShoppingLis
 全局 Key
 主要文章: GlobalKey
 
-您可以使用全局key来唯一标识子widget。全局key在整个widget层次结构中必须是全局唯一的，这与局部key不同，后者只需要在同级中唯一。由于它们是全局唯一的，因此可以使用全局key来检索与widget关联的状态。'''),
+您可以使用全局key来唯一标识子widget。全局key在整个widget层次结构中必须是全局唯一的，这与局部key不同，后者只需要在同级中唯一。由于它们是全局唯一的，因此可以使用全局key来检索与widget关联的状态。''',
+  ),
   Article(
-      title: 'Go开发',
-      author: 'hanlei',
-      Main_body: '''Go 是一个开源的编程语言，它能让构造简单、可靠且高效的软件变得容易。
+    title: 'Go开发',
+    author: 'hanlei',
+    mainbody: '''Go 是一个开源的编程语言，它能让构造简单、可靠且高效的软件变得容易。
 
 Go是从2007年末由Robert Griesemer, Rob Pike, Ken Thompson主持开发，后来还加入了Ian Lance Taylor, Russ Cox等人，并最终于2009年11月开源，在2012年早些时候发布了Go 1稳定版本。现在Go的开发已经是完全开放的，并且拥有一个活跃的社区。
 
@@ -1022,5 +978,6 @@ Hello, World!
  ls
 hello    hello.go
  ./hello 
-Hello, World!'''),
+Hello, World!''',
+  ),
 ];
