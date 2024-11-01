@@ -4,10 +4,20 @@ import 'dart:async';
 import 'Local_Storage/shared_preferences.dart';
 import 'pages/login/login.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    // 使用 Future.delayed 在一段时间后导航到主页
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  List<bool> _isVisible = [false, false, false, false];
+
+  @override
+  void initState() {
+    super.initState();
+    _animateText();
+
+    // 延迟 3 秒后跳转到主页
     Future.delayed(Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -23,24 +33,56 @@ class SplashScreen extends StatelessWidget {
               }
             },
           ),
-        ), // 你的主页
+        ),
       );
     });
+  }
 
+  // 逐字动画
+  void _animateText() {
+    for (int i = 0; i < _isVisible.length; i++) {
+      Future.delayed(Duration(milliseconds: 500 * i), () {
+        if (mounted) {
+          setState(() {
+            _isVisible[i] = true;
+          });
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 22, 21, 21),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/icon/logo.png'),
-            Text(
-              '欢迎回来',
-              style: TextStyle(
-                  fontSize: 80,
-                  fontWeight: FontWeight.bold,
-                  color: const Color.fromARGB(255, 245, 241, 241)),
+            Image.asset(
+              'assets/icon/logo2.png',
+              width: 300,
+              height: 300,
             ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (int i = 0; i < _isVisible.length; i++)
+                  AnimatedOpacity(
+                    opacity: _isVisible[i] ? 1.0 : 0.0,
+                    duration: Duration(milliseconds: 500),
+                    child: Text(
+                      '欢迎回来'[i],
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(255, 100, 99, 99),
+                      ),
+                    ),
+                  ),
+              ],
+            )
           ],
         ),
       ),

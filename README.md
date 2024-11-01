@@ -36,5 +36,5 @@ cd flutter_demo
 flutter build apk -v
 ```
 
-## 构建ipa
+## 构建ipa和apk
 将项目提交至github，github Actions检测到push或pull操作main分支时，会自动进行构建
