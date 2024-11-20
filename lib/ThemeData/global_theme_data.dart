@@ -10,8 +10,8 @@ class GlobalThemData {
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
         colorScheme: colorScheme,
-        canvasColor: colorScheme.background,
-        scaffoldBackgroundColor: colorScheme.background,
+        canvasColor: colorScheme.surface,
+        scaffoldBackgroundColor: colorScheme.surface,
         highlightColor: Colors.transparent,
         focusColor: focusColor);
   }
@@ -26,8 +26,8 @@ class GlobalThemData {
     onSecondary: Color.fromARGB(255, 53, 52, 56),
     error: Colors.redAccent,
     onError: Colors.white,
-    background: Color(0xFFE6EBEB),
-    onBackground: Colors.white,
+    surfaceBright: Color(0xFFE6EBEB),
+    onSurfaceVariant: Colors.white,
     surface: Color(0xFFFAFBFB),
     onSurface: Color(0xFF241E30),
     brightness: Brightness.light,
@@ -35,9 +35,9 @@ class GlobalThemData {
   static const ColorScheme darkColorScheme = ColorScheme(
     primary: Color.fromARGB(255, 243, 238, 238),
     secondary: Color.fromARGB(255, 15, 13, 17),
-    background: Color.fromARGB(255, 20, 18, 23),
+    surfaceBright: Color.fromARGB(255, 20, 18, 23),
     surface: Color.fromARGB(255, 29, 29, 30),
-    onBackground: Color.fromARGB(13, 19, 18, 18),
+    onSurfaceVariant: Color.fromARGB(13, 19, 18, 18),
     error: Colors.redAccent,
     onError: Color.fromARGB(255, 243, 238, 238),
     onPrimary: Color.fromARGB(255, 243, 238, 238),

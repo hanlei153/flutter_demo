@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'ThemeData/GlobalThemeData.dart';
+import 'ThemeData/global_theme_data.dart';
 import 'router/navigation.dart';
-import 'ScrollView/imageSlider.dart';
+import 'ScrollView/image_slider.dart';
 import 'ScrollView/scrollview_img.dart';
 import 'Local_Storage/shared_preferences.dart';
 import 'pages/Article/article_card.dart';
 import 'pages/users/edit_profile_page.dart';
-import 'pages/users/favorites_page.dart';
 import 'pages/users/privacy_page.dart';
-import 'pages/users/About_page.dart';
+import 'pages/users/about_page.dart';
 import 'pages/Article/articles.dart';
 import 'pages/login/login.dart';
-import 'SplashScreen.dart';
+import 'splash_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 void main() {
   runApp(MyApp());
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: "my_app",
+        title: "技栈",
         themeMode: ThemeMode.dark,
         theme: GlobalThemData.darkThemeData,
         home: SplashScreen(),
@@ -54,6 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
         page = HomePage();
         break;
       case 1:
+        page = FavoritesPage();
+        break;
+      case 2:
         page = PersonalPage();
         break;
       default:
@@ -77,6 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
             label: '首页',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: '收藏',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: '我的',
           ),
@@ -89,7 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 // 首页布局
-
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
@@ -129,6 +136,7 @@ class HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => EditProfilePage()));
             }),
       );
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -162,12 +170,12 @@ class HomePageState extends State<HomePage> {
             ),
             SliverList(
                 delegate: SliverChildBuilderDelegate((context, index) {
-              final article = Articles[index];
+              final article = articles[index];
               return Padding(
                 padding: EdgeInsets.all(5),
                 child: ArticleCard(article: article),
               );
-            }, childCount: Articles.length))
+            }, childCount: articles.length))
           ],
         ),
       ),
@@ -175,8 +183,125 @@ class HomePageState extends State<HomePage> {
   }
 }
 
+// 收藏页
+class FavoritesPage extends StatefulWidget {
+  @override
+  FavoritesPageState createState() => FavoritesPageState();
+}
+
+class FavoritesPageState extends State<FavoritesPage> {
+  List<Article> favoriteArticles = [];
+  @override
+  void initState() {
+    super.initState();
+    _loadFavorites();
+  }
+
+  Future<void> _loadFavorites() async {
+    final favoritesManager = LocalStorageManager();
+    final articles = await favoritesManager.getFavoriteArticles();
+    setState(() {
+      favoriteArticles = articles;
+    });
+  }
+
+  Future<bool?> _confirmDismiss(Article article) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('确认取消收藏'),
+          content: Text('您确定要取消收藏 ${article.title} 吗？'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false), // 取消
+              child: Text('取消'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true), // 确认
+              child: Text('确认'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _removeFavorite(Article article) {
+    setState(() {
+      favoriteArticles.remove(article); // 从列表中移除收藏的文章
+    });
+    // 在这里添加代码，将文章从本地存储中删除
+    LocalStorageManager().removeFavoriteArticle(article); // 假设你有这个方法
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: GestureDetector(
+          onTap: () async {
+            await LocalStorageManager().removeString('favorites');
+          },
+          child: Text('收藏'),
+        ),
+      ),
+      body: favoriteArticles.isEmpty
+          ? Center(
+              child: Text('No favorites yet.'),
+            )
+          : ListView.builder(
+              itemCount: favoriteArticles.length,
+              itemBuilder: (context, index) {
+                final article = favoriteArticles[index];
+                return Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Dismissible(
+                        key: Key(article.title),
+                        direction: DismissDirection.endToStart,
+                        confirmDismiss: (direction) async {
+                          return await _confirmDismiss(article); // 确认删除
+                        },
+                        onDismissed: (direction) {
+                          setState(() {
+                            _removeFavorite(article);
+                          });
+                        },
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Icon(Icons.close, color: Colors.white),
+                        ),
+                        child: ArticleCard(article: article)));
+              },
+            ),
+    );
+  }
+}
+
 // 个人页布局
-class PersonalPage extends StatelessWidget {
+class PersonalPage extends StatefulWidget {
+  @override
+  PersonalPageState createState() => PersonalPageState();
+}
+
+class PersonalPageState extends State<PersonalPage> {
+  // 用于保存头像图片的 File 对象
+  File? _profileImage;
+
+  // 选择图片的方法
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile =
+        await picker.pickImage(source: ImageSource.gallery); // 从相册选择图片
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path); // 更新头像图片
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,7 +324,7 @@ class PersonalPage extends StatelessWidget {
       ),
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(
+          SliverAppBar(
             title: null,
             centerTitle: true,
             floating: true,
@@ -210,9 +335,17 @@ class PersonalPage extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage('assets/image.png'),
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: _profileImage != null
+                            ? FileImage(_profileImage!)
+                            : null, // 显示选中的头像
+                        child: _profileImage == null
+                            ? Icon(Icons.camera_alt, size: 40) // 没有头像时显示相机图标
+                            : null,
+                      ),
                     ),
                     SizedBox(
                       height: 5,
@@ -238,20 +371,6 @@ class PersonalPage extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       navigateToPages(
-                          context, () => FavoritesPage(), SlideDirection.right);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(left: 50, top: 30),
-                      child: Text(
-                        '收藏',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  );
-                } else if (index == 1) {
-                  return GestureDetector(
-                    onTap: () {
-                      navigateToPages(
                           context, () => PrivacyPage(), SlideDirection.right);
                     },
                     child: Container(
@@ -262,7 +381,7 @@ class PersonalPage extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (index == 2) {
+                } else if (index == 1) {
                   return GestureDetector(
                     onTap: () {
                       navigateToPages(
@@ -276,7 +395,7 @@ class PersonalPage extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (index == 3) {
+                } else if (index == 2) {
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
@@ -302,7 +421,7 @@ class PersonalPage extends StatelessWidget {
                   );
                 }
               },
-              childCount: 4,
+              childCount: 3,
             ),
           ),
         ],
@@ -322,7 +441,7 @@ final List<String> imageUrls = [
   'assets/亚历山大灯塔.jpg',
 ];
 
-final List<Article> Articles = [
+final List<Article> articles = [
   Article(
     title: 'Python开发',
     author: 'hanlei',

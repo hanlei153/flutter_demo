@@ -8,10 +8,10 @@ class ImageSlider extends StatefulWidget {
   const ImageSlider({Key? key, required this.imageUrls}) : super(key: key);
 
   @override
-  _ImageSliderState createState() => _ImageSliderState();
+  ImageSliderState createState() => ImageSliderState();
 }
 
-class _ImageSliderState extends State<ImageSlider> {
+class ImageSliderState extends State<ImageSlider> {
   final PageController pageController = PageController();
   Timer? _timer;
   int _currentPage = 0;

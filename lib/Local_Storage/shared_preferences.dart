@@ -43,7 +43,7 @@ class LocalStorageManager {
 
   Future<void> saveFavoriteArticle(Article article) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> favorites = await prefs.getStringList('favorites') ?? [];
+    List<String> favorites = prefs.getStringList('favorites') ?? [];
 
     String articleJson = jsonEncode(article.toMap());
     if (!favorites.contains(articleJson)) {
@@ -54,7 +54,7 @@ class LocalStorageManager {
 
   Future<void> removeFavoriteArticle(Article article) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> favorites = await prefs.getStringList('favorites') ?? [];
+    List<String> favorites = prefs.getStringList('favorites') ?? [];
 
     String articleJson = jsonEncode(article.toMap());
     favorites.remove(articleJson); // 从收藏中移除

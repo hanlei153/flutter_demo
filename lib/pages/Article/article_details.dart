@@ -8,10 +8,10 @@ class ArticleDetails extends StatefulWidget {
   ArticleDetails({Key? key, required this.article}) : super(key: key);
 
   @override
-  _ArticleDetailsState createState() => _ArticleDetailsState();
+  ArticleDetailsState createState() => ArticleDetailsState();
 }
 
-class _ArticleDetailsState extends State<ArticleDetails> {
+class ArticleDetailsState extends State<ArticleDetails> {
   bool isFavorited = false;
 
   @override

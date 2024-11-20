@@ -33,25 +33,25 @@ class LoginPage extends StatelessWidget {
             ),
             ElevatedButton(
                 onPressed: () async {
-                  String Input_username = _usernameController.text;
-                  String Input_password = _passwordController.text;
-                  String true_password =
+                  String inputUsername = _usernameController.text;
+                  String inputPassword = _passwordController.text;
+                  String truePassword =
                       await LocalStorageManager().getString('password');
-                  if (Input_username == 'admin' &&
-                      Input_password == true_password) {
+                  if (inputUsername == 'admin' &&
+                      inputPassword == truePassword) {
                     await LocalStorageManager().setBool('isLoggedIn', true);
                     await LocalStorageManager()
-                        .setString('username', Input_username);
+                        .setString('username', inputUsername);
                     await LocalStorageManager()
                         .setString('email', '15303100813@163.com');
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => MyHomePage()));
-                  } else if (Input_username == 'admin' &&
-                      Input_password.isEmpty &&
-                      true_password == 'null') {
+                  } else if (inputUsername == 'admin' &&
+                      inputPassword.isEmpty &&
+                      truePassword == 'null') {
                     await LocalStorageManager().setBool('isLoggedIn', true);
                     await LocalStorageManager()
-                        .setString('username', Input_username);
+                        .setString('username', inputUsername);
                     await LocalStorageManager()
                         .setString('email', '15303100813@163.com');
                     Navigator.pushReplacement(context,

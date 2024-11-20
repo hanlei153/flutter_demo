@@ -26,8 +26,12 @@ class ArticleCard extends StatelessWidget {
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               )
             ])),
-            subtitle: Text(article.mainbody,
-                maxLines: 5, overflow: TextOverflow.ellipsis),
+            subtitle: Text(
+              article.mainbody,
+              maxLines: 5,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+            ),
             isThreeLine: true,
             onTap: () {
               navigateToPages(
